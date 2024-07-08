@@ -1,10 +1,11 @@
 export default {
   async fetch(request, env) {
-    const _url = new URL(request.url);
-    _url.hostname = _url.pathname.startsWith("/gh/")
-      ? "gamebanana.com"
-      : "www.baidu.com";
-    const req = new Request(_url, request);
-    return fetch(req);
+    let url = new URL(request.url);
+    if (url.pathname.startsWith('/')) {
+      url.hostname = 'gamebanana.com'
+      let new_request = new Request(url, request);
+      return fetch(new_request);
+    }
+    return env.ASSETS.fetch(request);
   },
 };
